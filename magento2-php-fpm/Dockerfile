@@ -34,6 +34,11 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | b
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer
 
+# Install mhsendmail
+RUN curl -Lo mhsendmail https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 \
+    && mv mhsendmail /usr/local/bin/ \
+    && chmod +x /usr/local/bin/mhsendmail
+
 # Set magento file permissions
 RUN useradd -m -s /bin/bash magento \
     && usermod -a -G www-data magento
