@@ -1,0 +1,21 @@
+FROM ubuntu:18.04
+
+RUN apt-get update && apt-get install -y openssh-server sudo nano
+RUN mkdir /var/run/sshd
+
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+
+# Create user ubuntu and default ssh key
+RUN useradd -m -s /bin/bash ubuntu 
+RUN mkdir /home/ubuntu/.ssh 
+COPY authorized_keys /home/ubuntu/.ssh
+RUN chmod 700 /home/ubuntu/.ssh && chmod 644 /home/ubuntu/.ssh/authorized_keys
+RUN chown -R ubuntu:ubuntu /home/ubuntu/.ssh
+
+# Allow user ubuntu run sudo without password
+RUN echo "ubuntu ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+EXPOSE 22
+CMD ["/usr/sbin/sshd", "-D"]
+
