@@ -32,6 +32,8 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | b
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer
+## Magento currently does not support Composer 2.x: https://github.com/magento/community-features/issues/302
+RUN composer selfupdate --1
 
 # Install mhsendmail
 RUN curl -Lo mhsendmail https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 \
